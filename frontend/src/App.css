@@ -1,13 +1,30 @@
 .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
   padding: 1rem 1.5rem;
   border-bottom: 1px solid #e5e7eb;
   background: #fff;
 }
 
-.header a {
+.logo {
   font-weight: 700;
+}
+
+.header a {
   color: #111827;
   text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav a.active {
+  font-weight: 700;
+  color: #1d4ed8;
 }
 
 .page {
@@ -71,6 +88,47 @@ h1 {
 
 .error {
   color: #b91c1c;
+}
+
+.notice {
+  color: #166534;
+}
+
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.cart-table th,
+.cart-table td {
+  text-align: left;
+  padding: 0.6rem 0.4rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.cart-table input {
+  width: 4.5rem;
+  padding: 0.3rem;
+}
+
+.order-list {
+  list-style: none;
+  padding: 0;
+}
+
+.order-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.card button,
+.page button {
+  margin-top: 0.5rem;
+  padding: 0.45rem 0.8rem;
 }
 
 .pager {

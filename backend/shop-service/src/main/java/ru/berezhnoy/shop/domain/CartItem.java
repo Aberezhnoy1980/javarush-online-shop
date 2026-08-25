@@ -58,4 +58,24 @@ public class CartItem {
     public Integer getQuantity() {
         return quantity;
     }
+
+    public static CartItem of(Cart cart, Product product, int quantity) {
+        CartItem item = new CartItem();
+        item.cart = cart;
+        item.product = product;
+        item.quantity = quantity;
+        LocalDateTime now = LocalDateTime.now();
+        item.createdAt = now;
+        item.updatedAt = now;
+        return item;
+    }
+
+    void assignTo(Cart cart) {
+        this.cart = cart;
+    }
+
+    public void changeQuantity(int quantity) {
+        this.quantity = quantity;
+        this.updatedAt = LocalDateTime.now();
+    }
 }

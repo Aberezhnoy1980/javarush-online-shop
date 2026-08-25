@@ -67,4 +67,28 @@ public class Payment {
     public PaymentStatus getStatus() {
         return status;
     }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public LocalDateTime getPaymentDate() {
+        return paymentDate;
+    }
+
+    public static Payment pending(Order order, BigDecimal amount) {
+        Payment payment = new Payment();
+        payment.order = order;
+        payment.amount = amount;
+        payment.status = PaymentStatus.PENDING;
+        payment.paymentMethod = "CARD";
+        LocalDateTime now = LocalDateTime.now();
+        payment.createdAt = now;
+        payment.updatedAt = now;
+        return payment;
+    }
+
+    void assignTo(Order order) {
+        this.order = order;
+    }
 }

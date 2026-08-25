@@ -41,10 +41,89 @@ export type PageResponse<T> = {
 
 export type ProductSort = 'NAME' | 'PRICE_ASC' | 'PRICE_DESC'
 
+export type CartItem = {
+  productId: number
+  name: string
+  price: number
+  quantity: number
+  stockQuantity: number
+  lineTotal: number
+}
+
+export type Cart = {
+  id: number
+  items: CartItem[]
+  totalQuantity: number
+  totalAmount: number
+}
+
+export type OrderStatus =
+  | 'NEW'
+  | 'PAYMENT_PENDING'
+  | 'PAID'
+  | 'PAYMENT_FAILED'
+  | 'PAYMENT_CANCELLED'
+  | 'PROCESSING'
+  | 'SHIPPED'
+  | 'DELIVERED'
+  | 'CANCELLED'
+
+export type PaymentStatus = 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED'
+
+export type OrderSummary = {
+  id: number
+  status: OrderStatus
+  totalAmount: number
+  createdAt: string
+}
+
+export type OrderDetails = OrderSummary & {
+  items: {
+    productId: number
+    productName: string
+    priceAtTime: number
+    quantity: number
+    lineTotal: number
+  }[]
+  payment: {
+    id: number
+    amount: number
+    status: PaymentStatus
+    paymentMethod: string
+  } | null
+}
+
 export function formatPrice(price: number): string {
   return new Intl.NumberFormat('ru-RU', {
     style: 'currency',
     currency: 'RUB',
     maximumFractionDigits: 0,
   }).format(price)
+}
+
+export async function readErrorMessage(response: Response, fallback: string): Promise<string> {
+  try {
+    const body = (await response.json()) as { message?: string }
+    return body.message ?? fallback
+  } catch {
+    return fallback
+  }
+}
+
+export async function addToCart(productId: number, quantity = 1): Promise<Cart> {
+  const response = await fetch('/api/cart/items', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ productId, quantity }),
+  })
+  if (!response.ok) {
+    throw new Error(await readErrorMessage(response, 'Не удалось добавить в корзину'))
+  }
+  const cart = (await response.json()) as Cart
+  notifyCartChanged()
+  return cart
+}
+
+export function notifyCartChanged() {
+  window.dispatchEvent(new Event('cart-updated'))
 }

@@ -77,4 +77,14 @@ public class Product {
     public String getDescription() {
         return description;
     }
+
+    public void decreaseStock(int quantity) {
+        if (quantity > stockQuantity) {
+            throw new IllegalArgumentException(
+                    "Not enough stock for product " + id + ": requested " + quantity + ", available " + stockQuantity
+            );
+        }
+        stockQuantity -= quantity;
+        updatedAt = LocalDateTime.now();
+    }
 }

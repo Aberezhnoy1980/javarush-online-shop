@@ -6,7 +6,7 @@
 
 ## Текущее состояние
 
-Foundation + database baseline + catalog: поиск, фильтры, сортировка, пагинация, Redis cache-aside и UI каталога. Корзина, заказы и оплата ещё не реализованы.
+Foundation + database baseline + catalog + cart/orders: demo user, корзина, оформление заказа со snapshot позиций. Оплата ещё не реализована.
 
 ## Цель / MVP
 
@@ -56,6 +56,8 @@ cd frontend && npm install && npm run dev
 | shop-service health | http://localhost:8080/actuator/health |
 | payment-service health | http://localhost:8081/actuator/health |
 | Catalog API | http://localhost:8080/api/products |
+| Cart API | http://localhost:8080/api/cart |
+| Orders API | http://localhost:8080/api/orders |
 | PostgreSQL | `localhost:5432`, db/user/password: `online_shop` |
 | Redis | `localhost:6379` |
 

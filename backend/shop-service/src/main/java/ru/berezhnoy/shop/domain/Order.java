@@ -1,5 +1,6 @@
 package ru.berezhnoy.shop.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -38,10 +39,10 @@ public class Order {
     @Column(nullable = false, length = 20)
     private OrderStatus status;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
 
-    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Payment payment;
 
     @Column(name = "created_at", nullable = false)
@@ -75,5 +76,30 @@ public class Order {
 
     public Payment getPayment() {
         return payment;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public static Order place(User user, BigDecimal totalAmount) {
+        Order order = new Order();
+        order.user = user;
+        order.totalAmount = totalAmount;
+        order.status = OrderStatus.NEW;
+        LocalDateTime now = LocalDateTime.now();
+        order.createdAt = now;
+        order.updatedAt = now;
+        return order;
+    }
+
+    public void addItem(OrderItem item) {
+        items.add(item);
+        item.assignTo(this);
+    }
+
+    public void attachPayment(Payment payment) {
+        this.payment = payment;
+        payment.assignTo(this);
     }
 }

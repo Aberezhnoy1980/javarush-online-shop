@@ -74,4 +74,19 @@ public class OrderItem {
     public BigDecimal getLineTotal() {
         return lineTotal;
     }
+
+    public static OrderItem snapshot(Product product, int quantity) {
+        OrderItem item = new OrderItem();
+        item.product = product;
+        item.productNameSnapshot = product.getName();
+        item.priceAtTime = product.getPrice();
+        item.quantity = quantity;
+        item.lineTotal = product.getPrice().multiply(BigDecimal.valueOf(quantity));
+        item.createdAt = LocalDateTime.now();
+        return item;
+    }
+
+    void assignTo(Order order) {
+        this.order = order;
+    }
 }

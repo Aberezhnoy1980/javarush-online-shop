@@ -9,6 +9,7 @@ spring:
 shop:
   cache:
     ttl: 5m
+  demo-user-id: 1
 
 management:
   health:

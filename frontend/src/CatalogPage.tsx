@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { Brand, Category, PageResponse, ProductCatalogItem, ProductSort } from './api'
-import { formatPrice } from './api'
+import { addToCart, formatPrice } from './api'
 
 export default function CatalogPage() {
   const [query, setQuery] = useState('')
@@ -15,6 +15,7 @@ export default function CatalogPage() {
   const [brands, setBrands] = useState<Brand[]>([])
   const [result, setResult] = useState<PageResponse<ProductCatalogItem> | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
 
   useEffect(() => {
     Promise.all([
@@ -144,6 +145,7 @@ export default function CatalogPage() {
         </select>
       </form>
       {error && <p className="error">{error}</p>}
+      {notice && <p className="notice">{notice}</p>}
       <section className="grid">
         {result?.content.map((product) => (
           <article key={product.id} className="card">
@@ -156,6 +158,17 @@ export default function CatalogPage() {
             <p>{product.shortDescription}</p>
             <p className="price">{formatPrice(product.price)}</p>
             <p className="stock">В наличии: {product.stockQuantity}</p>
+            <button
+              type="button"
+              disabled={product.stockQuantity <= 0}
+              onClick={() => {
+                addToCart(product.id)
+                  .then(() => setNotice(`${product.name} добавлен в корзину`))
+                  .catch((reason: Error) => setError(reason.message))
+              }}
+            >
+              В корзину
+            </button>
           </article>
         ))}
       </section>
