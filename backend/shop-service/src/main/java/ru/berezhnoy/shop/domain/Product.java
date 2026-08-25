@@ -73,4 +73,8 @@ public class Product {
     public Category getCategory() {
         return category;
     }
+
+    public String getDescription() {
+        return description;
+    }
 }

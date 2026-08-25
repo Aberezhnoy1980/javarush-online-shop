@@ -18,9 +18,21 @@ spring:
           time_zone: UTC
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      timeout: 200ms
+
+shop:
+  cache:
+    ttl: 5m
 
 management:
   endpoints:
     web:
       exposure:
         include: health,info
+  health:
+    redis:
+      enabled: false

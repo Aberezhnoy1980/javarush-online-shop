@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 @TestConfiguration(proxyBeanMethods = false)
-class PostgresTestConfiguration {
+public class PostgresTestConfiguration {
 
     static {
         // docker-java still probes /v1.32/info; Docker Desktop 29 answers HTTP 400 on that path.

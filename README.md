@@ -6,7 +6,7 @@
 
 ## Текущее состояние
 
-Foundation + database baseline: Docker Compose поднимает сервисы, PostgreSQL получает исправленную схему через Liquibase, Hibernate стартует с `ddl-auto=validate`. Каталог, корзина, заказы и оплата ещё не реализованы.
+Foundation + database baseline + catalog: поиск, фильтры, сортировка, пагинация, Redis cache-aside и UI каталога. Корзина, заказы и оплата ещё не реализованы.
 
 ## Цель / MVP
 
@@ -55,7 +55,7 @@ cd frontend && npm install && npm run dev
 | UI | http://localhost |
 | shop-service health | http://localhost:8080/actuator/health |
 | payment-service health | http://localhost:8081/actuator/health |
-| shop-service API (позже) | http://localhost:8080/api |
+| Catalog API | http://localhost:8080/api/products |
 | PostgreSQL | `localhost:5432`, db/user/password: `online_shop` |
 | Redis | `localhost:6379` |
 
@@ -96,7 +96,7 @@ email  = ivan.petrov@example.com
 | API         | OpenAPI / Swagger UI                                                             |
 | UI          | React + Vite + TypeScript                                                        |
 | Runtime     | Docker Compose + Nginx для frontend                                              |
-| Тесты       | JUnit 5, Mockito, Spring Boot Test; Testcontainers — только если останется время |
+| Тесты       | JUnit 5, Mockito, Spring Boot Test, Testcontainers PostgreSQL                    |
 
 ## JPA-инструменты
 

@@ -60,6 +60,8 @@
                 <version>3.13.0</version>
                 <configuration>
                     <release>${java.version}</release>
+                    <!-- Spring MVC binds @RequestParam/@PathVariable by parameter names. -->
+                    <parameters>true</parameters>
                 </configuration>
             </plugin>
         </plugins>

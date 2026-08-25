@@ -1,0 +1,16 @@
+spring:
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 16379
+      timeout: 50ms
+
+# Test classpath shadows src/main/resources/application.yml, so keep app keys here too.
+shop:
+  cache:
+    ttl: 5m
+
+management:
+  health:
+    redis:
+      enabled: false
