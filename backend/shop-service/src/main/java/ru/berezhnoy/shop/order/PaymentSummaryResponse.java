@@ -8,6 +8,7 @@ public record PaymentSummaryResponse(
         Integer id,
         BigDecimal amount,
         PaymentStatus status,
-        String paymentMethod
+        String paymentMethod,
+        String transactionId
 ) {
 }

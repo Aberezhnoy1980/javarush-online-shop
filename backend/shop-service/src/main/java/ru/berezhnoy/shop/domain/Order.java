@@ -82,6 +82,40 @@ public class Order {
         return createdAt;
     }
 
+    public boolean allowsPayment() {
+        return status == OrderStatus.NEW
+                || status == OrderStatus.PAYMENT_FAILED
+                || status == OrderStatus.PAYMENT_PENDING;
+    }
+
+    public boolean allowsCancel() {
+        return status == OrderStatus.PAID;
+    }
+
+    public void markPaymentPending() {
+        status = OrderStatus.PAYMENT_PENDING;
+        touch();
+    }
+
+    public void markPaid() {
+        status = OrderStatus.PAID;
+        touch();
+    }
+
+    public void markPaymentFailed() {
+        status = OrderStatus.PAYMENT_FAILED;
+        touch();
+    }
+
+    public void markPaymentCancelled() {
+        status = OrderStatus.PAYMENT_CANCELLED;
+        touch();
+    }
+
+    private void touch() {
+        updatedAt = LocalDateTime.now();
+    }
+
     public static Order place(User user, BigDecimal totalAmount) {
         Order order = new Order();
         order.user = user;

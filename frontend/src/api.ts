@@ -90,6 +90,7 @@ export type OrderDetails = OrderSummary & {
     amount: number
     status: PaymentStatus
     paymentMethod: string
+    transactionId: string | null
   } | null
 }
 

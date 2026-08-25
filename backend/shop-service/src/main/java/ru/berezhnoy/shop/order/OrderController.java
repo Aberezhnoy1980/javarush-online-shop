@@ -15,9 +15,11 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+    private final OrderPaymentService orderPaymentService;
 
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, OrderPaymentService orderPaymentService) {
         this.orderService = orderService;
+        this.orderPaymentService = orderPaymentService;
     }
 
     @PostMapping
@@ -33,5 +35,15 @@ public class OrderController {
     @GetMapping("/{orderId}")
     public OrderDetailsResponse getOrder(@PathVariable("orderId") Integer orderId) {
         return orderService.getOrder(orderId);
+    }
+
+    @PostMapping("/{orderId}/payment")
+    public OrderDetailsResponse pay(@PathVariable("orderId") Integer orderId) {
+        return orderPaymentService.pay(orderId);
+    }
+
+    @PostMapping("/{orderId}/payment/cancel")
+    public OrderDetailsResponse cancelPayment(@PathVariable("orderId") Integer orderId) {
+        return orderPaymentService.cancel(orderId);
     }
 }

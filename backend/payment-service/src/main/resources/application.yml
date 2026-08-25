@@ -5,6 +5,9 @@ spring:
   application:
     name: payment-service
 
+payment:
+  failure-rate: ${PAYMENT_FAILURE_RATE:0}
+
 management:
   endpoints:
     web:

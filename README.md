@@ -6,7 +6,7 @@
 
 ## Текущее состояние
 
-Foundation + database baseline + catalog + cart/orders: demo user, корзина, оформление заказа со snapshot позиций. Оплата ещё не реализована.
+Foundation + catalog + cart/orders + payments: оплата и отмена через payment-service, повтор после `PAYMENT_FAILED`. Analytics и отзывы ещё не реализованы.
 
 ## Цель / MVP
 
@@ -48,6 +48,20 @@ Frontend в режиме разработки (нужен запущенный s
 cd frontend && npm install && npm run dev
 ```
 
+Симуляция временного отказа payment-service:
+
+```bash
+PAYMENT_FAILURE_RATE=1 docker compose up -d payment-service
+```
+
+Shop-service не выставит `PAID`; заказ станет `PAYMENT_FAILED`, оплату можно повторить. Вернуть стабильный режим:
+
+```bash
+docker compose up -d payment-service
+```
+
+По умолчанию `PAYMENT_FAILURE_RATE=0`.
+
 ## Адреса
 
 | Что | URL |
@@ -58,6 +72,9 @@ cd frontend && npm install && npm run dev
 | Catalog API | http://localhost:8080/api/products |
 | Cart API | http://localhost:8080/api/cart |
 | Orders API | http://localhost:8080/api/orders |
+| shop-service Swagger | http://localhost:8080/swagger-ui.html |
+| payment-service Swagger | http://localhost:8081/swagger-ui.html |
+| Контракт payment-service | [`api/payment-api.yaml`](api/payment-api.yaml) |
 | PostgreSQL | `localhost:5432`, db/user/password: `online_shop` |
 | Redis | `localhost:6379` |
 
@@ -114,6 +131,8 @@ email  = ivan.petrov@example.com
 
 ```text
 online-shop/
+├── api/
+│   └── payment-api.yaml      # контракт payment-service
 ├── backend/
 │   ├── shop-service/         # Spring MVC + JPA/Hibernate + Redis cache-aside
 │   └── payment-service/      # Spring MVC, pay/cancel/failure mode

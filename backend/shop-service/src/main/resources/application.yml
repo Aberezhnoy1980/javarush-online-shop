@@ -28,6 +28,8 @@ shop:
   cache:
     ttl: 5m
   demo-user-id: 1
+  payment-service:
+    base-url: ${SHOP_PAYMENT_SERVICE_BASE_URL:http://localhost:8081}
 
 management:
   endpoints:

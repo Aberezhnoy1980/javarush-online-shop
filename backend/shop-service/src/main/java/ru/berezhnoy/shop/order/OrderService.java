@@ -76,7 +76,7 @@ public class OrderService {
         Order saved = orderRepository.save(order);
         cart.clearItems();
         cartRepository.save(cart);
-        return toDetails(saved);
+        return OrderMapper.toDetails(saved);
     }
 
     @Transactional(readOnly = true)
@@ -93,35 +93,12 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public OrderDetailsResponse getOrder(Integer orderId) {
-        Order order = orderRepository.findByIdAndUser_Id(orderId, demoUserService.userId())
-                .orElseThrow(() -> new ResourceNotFoundException("Order " + orderId + " not found"));
-        return toDetails(order);
+        Order order = requireOwned(orderId);
+        return OrderMapper.toDetails(order);
     }
 
-    private static OrderDetailsResponse toDetails(Order order) {
-        List<OrderItemResponse> items = order.getItems().stream()
-                .map(item -> new OrderItemResponse(
-                        item.getProduct().getId(),
-                        item.getProductNameSnapshot(),
-                        item.getPriceAtTime(),
-                        item.getQuantity(),
-                        item.getLineTotal()
-                ))
-                .toList();
-        Payment payment = order.getPayment();
-        PaymentSummaryResponse paymentResponse = payment == null ? null : new PaymentSummaryResponse(
-                payment.getId(),
-                payment.getAmount(),
-                payment.getStatus(),
-                payment.getPaymentMethod()
-        );
-        return new OrderDetailsResponse(
-                order.getId(),
-                order.getStatus(),
-                order.getTotalAmount(),
-                order.getCreatedAt(),
-                items,
-                paymentResponse
-        );
+    Order requireOwned(Integer orderId) {
+        return orderRepository.findByIdAndUser_Id(orderId, demoUserService.userId())
+                .orElseThrow(() -> new ResourceNotFoundException("Order " + orderId + " not found"));
     }
 }

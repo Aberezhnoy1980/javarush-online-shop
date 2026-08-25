@@ -76,6 +76,27 @@ public class Payment {
         return paymentDate;
     }
 
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void complete(String gatewayPaymentId) {
+        this.transactionId = gatewayPaymentId;
+        this.status = PaymentStatus.COMPLETED;
+        this.paymentDate = LocalDateTime.now();
+        this.updatedAt = this.paymentDate;
+    }
+
+    public void fail() {
+        this.status = PaymentStatus.FAILED;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void refund() {
+        this.status = PaymentStatus.REFUNDED;
+        this.updatedAt = LocalDateTime.now();
+    }
+
     public static Payment pending(Order order, BigDecimal amount) {
         Payment payment = new Payment();
         payment.order = order;

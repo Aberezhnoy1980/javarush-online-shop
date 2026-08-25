@@ -1,0 +1,105 @@
+openapi: 3.0.3
+info:
+  title: Online Shop Payment Service
+  version: 1.0.0
+  description: In-memory payment provider used by shop-service. Temporary outages are simulated with PAYMENT_FAILURE_RATE.
+servers:
+  - url: http://localhost:8081
+paths:
+  /api/payments:
+    post:
+      summary: Charge a payment
+      operationId: createPayment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentRequest'
+      responses:
+        '201':
+          description: Payment completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+        '400':
+          description: Invalid request
+        '503':
+          description: Temporary provider outage
+  /api/payments/{paymentId}:
+    get:
+      summary: Get payment by id
+      operationId: getPayment
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Payment found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+        '404':
+          description: Payment not found
+        '503':
+          description: Temporary provider outage
+  /api/payments/{paymentId}/cancel:
+    post:
+      summary: Cancel a completed payment
+      operationId: cancelPayment
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Payment refunded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+        '404':
+          description: Payment not found
+        '409':
+          description: Payment is not in COMPLETED status
+        '503':
+          description: Temporary provider outage
+components:
+  schemas:
+    CreatePaymentRequest:
+      type: object
+      required: [orderId, amount, paymentMethod]
+      properties:
+        orderId:
+          type: integer
+        amount:
+          type: number
+          format: double
+        paymentMethod:
+          type: string
+          example: CARD
+    PaymentResponse:
+      type: object
+      required: [id, orderId, amount, status, transactionId, paymentMethod]
+      properties:
+        id:
+          type: string
+        orderId:
+          type: integer
+        amount:
+          type: number
+          format: double
+        status:
+          type: string
+          enum: [COMPLETED, REFUNDED]
+        transactionId:
+          type: string
+        paymentMethod:
+          type: string
