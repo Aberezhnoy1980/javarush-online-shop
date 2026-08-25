@@ -31,6 +31,11 @@ shop:
   payment-service:
     base-url: ${SHOP_PAYMENT_SERVICE_BASE_URL:http://localhost:8081}
 
+springdoc:
+  swagger-ui:
+    tags-sorter: alpha
+    operations-sorter: method
+
 management:
   endpoints:
     web:

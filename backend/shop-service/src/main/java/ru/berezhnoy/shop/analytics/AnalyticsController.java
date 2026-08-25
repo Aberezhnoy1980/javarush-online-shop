@@ -1,5 +1,6 @@
 package ru.berezhnoy.shop.analytics;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/analytics")
+@Tag(name = "Analytics")
 public class AnalyticsController {
 
     private final AnalyticsService analyticsService;

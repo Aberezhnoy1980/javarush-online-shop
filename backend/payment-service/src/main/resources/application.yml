@@ -8,6 +8,11 @@ spring:
 payment:
   failure-rate: ${PAYMENT_FAILURE_RATE:0}
 
+springdoc:
+  swagger-ui:
+    tags-sorter: alpha
+    operations-sorter: method
+
 management:
   endpoints:
     web:
