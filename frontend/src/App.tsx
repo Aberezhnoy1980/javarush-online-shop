@@ -5,6 +5,7 @@ import ProductPage from './ProductPage'
 import CartPage from './CartPage'
 import OrdersPage from './OrdersPage'
 import OrderPage from './OrderPage'
+import AnalyticsPage from './AnalyticsPage'
 import type { Cart } from './api'
 import './App.css'
 
@@ -39,6 +40,7 @@ function Header() {
         </NavLink>
         <NavLink to="/cart">Корзина{cartCount > 0 ? ` (${cartCount})` : ''}</NavLink>
         <NavLink to="/orders">Заказы</NavLink>
+        <NavLink to="/analytics">Аналитика</NavLink>
       </nav>
     </header>
   )
@@ -54,6 +56,7 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/orders" element={<OrdersPage />} />
         <Route path="/orders/:orderId" element={<OrderPage />} />
+        <Route path="/analytics" element={<AnalyticsPage />} />
       </Routes>
     </BrowserRouter>
   )

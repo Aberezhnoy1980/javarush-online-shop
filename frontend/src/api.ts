@@ -77,6 +77,32 @@ export type OrderSummary = {
   createdAt: string
 }
 
+export type TopProduct = {
+  productId: number
+  productName: string
+  unitsSold: number
+  revenue: number
+  averageRating: number | null
+}
+
+export type CategorySales = {
+  categoryId: number
+  categoryName: string
+  orderCount: number
+  unitsSold: number
+  revenue: number
+}
+
+export type OrderStatusCount = {
+  status: OrderStatus
+  orderCount: number
+}
+
+export type SalesSummary = {
+  categories: CategorySales[]
+  orderStatuses: OrderStatusCount[]
+}
+
 export type OrderDetails = OrderSummary & {
   items: {
     productId: number

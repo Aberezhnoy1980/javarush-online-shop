@@ -6,14 +6,14 @@
 
 ## Текущее состояние
 
-Foundation + catalog + cart/orders + payments: оплата и отмена через payment-service, повтор после `PAYMENT_FAILED`. Analytics и отзывы ещё не реализованы.
+Foundation + catalog + cart/orders + payments + analytics: топ товаров и выручка по категориям в PostgreSQL, детали заказа без N+1. Отзывы в UI ещё не реализованы.
 
 ## Цель / MVP
 
 * Каталог: фильтр, поиск, сортировка, страницы, Redis cache-aside.
 * Demo user, корзина, заказы, отзывы — все сущности исходной схемы сохраняются.
 * Payment-service: pay, cancel, controlled 503.
-* UI: каталог → корзина → заказ → оплата/отмена → история заказов.
+* UI: каталог → корзина → заказ → оплата/отмена → история заказов → аналитика.
 * Analytics: хотя бы top products и revenue by category.
 * Postgres + Redis + два сервиса + frontend через Docker Compose.
 * Swagger, README, Liquibase, smoke tests.
@@ -62,6 +62,8 @@ docker compose up -d payment-service
 
 По умолчанию `PAYMENT_FAILURE_RATE=0`.
 
+Аналитика считает агрегаты в PostgreSQL (`SUM`, `COUNT`, `AVG`). В выручку входят статусы `PAID`, `PROCESSING`, `SHIPPED`, `DELIVERED`. Период — query-параметры `from` и `to` (даты включительно). Как устроены запросы и индексы: [`docs/query-optimization.md`](docs/query-optimization.md).
+
 ## Адреса
 
 | Что | URL |
@@ -72,6 +74,7 @@ docker compose up -d payment-service
 | Catalog API | http://localhost:8080/api/products |
 | Cart API | http://localhost:8080/api/cart |
 | Orders API | http://localhost:8080/api/orders |
+| Analytics API | http://localhost:8080/api/analytics/top-products |
 | shop-service Swagger | http://localhost:8080/swagger-ui.html |
 | payment-service Swagger | http://localhost:8081/swagger-ui.html |
 | Контракт payment-service | [`api/payment-api.yaml`](api/payment-api.yaml) |
@@ -141,7 +144,8 @@ online-shop/
 │   └── source/
 │       └── online-shop.sql   # исходная схема, только как reference
 ├── docs/
-│   └── database-schema.md
+│   ├── database-schema.md
+│   └── query-optimization.md
 ├── infra/
 │   └── nginx/
 ├── docker-compose.yml

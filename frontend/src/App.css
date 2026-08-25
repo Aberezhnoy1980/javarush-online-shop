@@ -141,3 +141,22 @@ h1 {
 .pager button {
   padding: 0.4rem 0.8rem;
 }
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 1.5rem;
+}
+
+.analytics-block h2 {
+  margin: 1.25rem 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
