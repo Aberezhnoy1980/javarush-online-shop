@@ -6,7 +6,7 @@
 
 ## Текущее состояние
 
-Foundation: два backend-сервиса с health-проверками, React-скелет, PostgreSQL и Redis поднимаются одной командой Docker Compose. Каталог, корзина, заказы и оплата ещё не реализованы.
+Foundation + database baseline: Docker Compose поднимает сервисы, PostgreSQL получает исправленную схему через Liquibase, Hibernate стартует с `ddl-auto=validate`. Каталог, корзина, заказы и оплата ещё не реализованы.
 
 ## Цель / MVP
 
@@ -32,11 +32,15 @@ docker compose up --build
 docker compose down -v --remove-orphans
 ```
 
-Локальная сборка backend без Docker:
+Локальная сборка backend. Тесты `shop-service` поднимают одноразовый PostgreSQL через Testcontainers — нужен запущенный Docker, стендовый Compose-Postgres для этого не используется:
 
 ```bash
 ./mvnw -B test
 ```
+
+На Docker Desktop 29 docker-java по умолчанию ходит в `/v1.32/info` и получает HTTP 400. В `shop-service` для тестов задан Docker API 1.44.
+
+CI на GitHub Actions гоняет те же Maven-тесты (Testcontainers на ubuntu-latest) и `npm run build` для frontend.
 
 Frontend в режиме разработки (нужен запущенный shop-service на порту 8080):
 
@@ -59,12 +63,24 @@ cd frontend && npm install && npm run dev
 
 ## Demo user
 
-Авторизация не реализуется. Приложение будет работать с предзаполненным пользователем учебного seed:
+Авторизация не реализуется. Приложение работает с предзаполненным пользователем учебного seed:
 
 ```text
 userId = 1
 email  = ivan.petrov@example.com
 ```
+
+## База данных
+
+За основу взята SQL-схема интернет-магазина из учебного репозитория JavaRush:
+
+- репозиторий: [ArtemAlt/JRU-2025-11-05-Module-3](https://github.com/ArtemAlt/JRU-2025-11-05-Module-3)
+- ветка: `Module_4_Lesson_18`
+- файл: [`online-shop.sql`](https://github.com/ArtemAlt/JRU-2025-11-05-Module-3/blob/Module_4_Lesson_18/online-shop.sql)
+
+В исходном скрипте были несоответствия между DDL и тестовыми данными: разные имена таблиц и внешних ключей, опечатка в SQL-типе, данные, нарушающие constraints.
+
+Исправления задокументированы в issue [#1](https://github.com/Aberezhnoy1980/javarush-online-shop/issues/1) и применены в Liquibase. Исходный файл хранится как reference в `db/source/online-shop.sql`. Подробности — в [`docs/database-schema.md`](docs/database-schema.md).
 
 ## Стек
 
@@ -100,6 +116,11 @@ online-shop/
 │   ├── shop-service/         # Spring MVC + JPA/Hibernate + Redis cache-aside
 │   └── payment-service/      # Spring MVC, pay/cancel/failure mode
 ├── frontend/                 # React + Vite + TypeScript
+├── db/
+│   └── source/
+│       └── online-shop.sql   # исходная схема, только как reference
+├── docs/
+│   └── database-schema.md
 ├── infra/
 │   └── nginx/
 ├── docker-compose.yml

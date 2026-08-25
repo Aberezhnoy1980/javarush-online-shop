@@ -1,0 +1,8 @@
+package ru.berezhnoy.shop.domain;
+
+public enum PaymentStatus {
+    PENDING,
+    COMPLETED,
+    FAILED,
+    REFUNDED
+}
