@@ -8,8 +8,15 @@ logs/
 
 # ---- Java / Maven ----
 target/
-*/target/
+**/target/
 out/
+.mvn/wrapper/maven-wrapper.jar
+
+# ---- Node / frontend ----
+node_modules/
+dist/
+**/dist/
+*.tsbuildinfo
 
 # ---- IntelliJ IDEA ----
 .idea/
