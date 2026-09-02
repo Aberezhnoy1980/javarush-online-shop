@@ -11,14 +11,19 @@
     <name>online-shop</name>
     <description>Multi-module online shop application for the JavaRush Module 4 final project</description>
 
+    <modules>
+        <module>backend/shop-service</module>
+        <module>backend/payment-service</module>
+    </modules>
+
     <properties>
-     <java.version>21</java.version>
+        <java.version>21</java.version>
         <spring.boot.version>3.3.5</spring.boot.version>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-     <dependencyManagement>
+    <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -31,26 +36,34 @@
     </dependencyManagement>
 
     <build>
-    <pluginManagement>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring.boot.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring.boot.version}</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <release>${java.version}</release>
+                    <!-- Spring MVC binds @RequestParam/@PathVariable by parameter names. -->
+                    <parameters>true</parameters>
+                </configuration>
             </plugin>
         </plugins>
-    </pluginManagement>
-
-    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.13.0</version>
-            <configuration>
-                <release>${java.version}</release>
-            </configuration>
-        </plugin>
-    </plugins>
-</build>
-
+    </build>
 </project>

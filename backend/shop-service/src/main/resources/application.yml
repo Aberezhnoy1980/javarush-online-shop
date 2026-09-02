@@ -1,0 +1,46 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: shop-service
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/online_shop}
+    username: ${SPRING_DATASOURCE_USERNAME:online_shop}
+    password: ${SPRING_DATASOURCE_PASSWORD:online_shop}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      timeout: 200ms
+
+shop:
+  cache:
+    ttl: 5m
+  demo-user-id: 1
+  payment-service:
+    base-url: ${SHOP_PAYMENT_SERVICE_BASE_URL:http://localhost:8081}
+
+springdoc:
+  swagger-ui:
+    tags-sorter: alpha
+    operations-sorter: method
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  health:
+    redis:
+      enabled: false
